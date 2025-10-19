@@ -1,0 +1,23 @@
+{
+  "name": "social-bubble",
+  "version": "1.0.0",
+  "description": "Interactive social media bubble visualization",
+  "scripts": {
+    "install:all": "cd backend && npm install && cd ../frontend && npm install",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build:frontend": "cd frontend && npm run build",
+    "preview:frontend": "cd frontend && npm run preview"
+  },
+  "keywords": [
+    "social-media",
+    "visualization",
+    "d3js",
+    "react",
+    "websocket",
+    "bluesky"
+  ],
+  "author": "",
+  "license": "MIT"
+}
+
