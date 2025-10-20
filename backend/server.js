@@ -20,26 +20,32 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: function (origin, callback) {
+      // Allow localhost, env variable, and all Vercel preview deployments
+      if (!origin || 
+          origin.includes('localhost') || 
+          origin === process.env.FRONTEND_URL ||
+          origin.endsWith('.vercel.app')) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     methods: ['GET', 'POST'],
+    credentials: true,
   },
 });
 
 const PORT = process.env.PORT || 3001;
 
-// CORS configuration - supports both local development and production
+// CORS configuration - supports local development, production, and all Vercel previews
 const corsOptions = {
   origin: function (origin, callback) {
-    const allowedOrigins = [
-      'http://localhost:5173',
-      'http://localhost:3000',
-      process.env.FRONTEND_URL,
-      // Add your Vercel deployment URL here after deployment
-      // e.g., 'https://social-bubble.vercel.app'
-    ].filter(Boolean); // Remove undefined values
-    
-    // Allow requests with no origin (like mobile apps or Postman)
-    if (!origin || allowedOrigins.includes(origin)) {
+    // Allow localhost, env variable, and all Vercel preview deployments
+    if (!origin || 
+        origin.includes('localhost') || 
+        origin === process.env.FRONTEND_URL ||
+        origin.endsWith('.vercel.app')) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
