@@ -2,7 +2,7 @@
 
 **An interactive real-time visualization of social media conversations as floating 3D bubbles**
 
-[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen.svg)](https://social-bubble.vercel.app)
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen.svg)](https://social-bubble-ejui9q0ec-king0508s-projects.vercel.app)
 [![React](https://img.shields.io/badge/React-18.3-61dafb.svg)](https://reactjs.org/)
 [![D3.js](https://img.shields.io/badge/D3.js-7.9-orange.svg)](https://d3js.org/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -12,6 +12,15 @@
 ## ✨ Overview
 
 Social Bubble transforms live social media data from Bluesky into a mesmerizing visualization where conversations become colorful, interactive 3D bubbles. Watch as trending topics float and pulse with activity, with each bubble containing individual posts sized by their popularity and engagement.
+
+### 🌐 Live Deployment
+
+**✨ [View Live Demo](https://social-bubble-ejui9q0ec-king0508s-projects.vercel.app)** - Experience the visualization in action!
+
+- **Frontend:** Deployed on Vercel
+- **Backend:** Deployed on Railway
+- **Database:** PostgreSQL on Railway
+- **Status:** 🟢 Live and updating every 15 minutes
 
 ### 🎯 Key Features
 
