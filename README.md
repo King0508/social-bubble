@@ -7,7 +7,7 @@
 [![D3.js](https://img.shields.io/badge/D3.js-7.9-orange.svg)](https://d3js.org/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-![Social Bubble Preview](./screenshot.png)
+![Social Bubble Preview](./socialbubble.png)
 
 ## ✨ Overview
 
@@ -29,6 +29,7 @@ Social Bubble transforms live social media data from Bluesky into a mesmerizing 
 ## 🚀 Tech Stack
 
 ### Frontend
+
 - **React** - UI framework
 - **D3.js** - Data visualization and force simulation
 - **Vite** - Fast build tool and dev server
@@ -36,6 +37,7 @@ Social Bubble transforms live social media data from Bluesky into a mesmerizing 
 - **CSS3** - Custom animations and styling
 
 ### Backend
+
 - **Node.js & Express** - REST API server
 - **Socket.io** - WebSocket server for real-time updates
 - **PostgreSQL** - Persistent data storage
@@ -43,6 +45,7 @@ Social Bubble transforms live social media data from Bluesky into a mesmerizing 
 - **Node-cron** - Scheduled data fetching
 
 ### Infrastructure
+
 - **Vercel** - Frontend hosting
 - **Railway** - Backend hosting + PostgreSQL database
 - **GitHub Actions** - CI/CD pipeline
@@ -50,6 +53,7 @@ Social Bubble transforms live social media data from Bluesky into a mesmerizing 
 ## 📸 Features in Detail
 
 ### Real-Time Visualization
+
 - Posts appear as bubbles within topic circles
 - Size reflects engagement (likes + reposts + replies)
 - Color-coded by hashtag category
@@ -57,6 +61,7 @@ Social Bubble transforms live social media data from Bluesky into a mesmerizing 
 - No overlapping bubbles with automatic scaling
 
 ### Advanced Filters
+
 - **Trending Topics**: Click hashtags to filter posts
 - **Author Search**: Find posts by specific users
 - **Dynamic Updates**: Filters apply in real-time
@@ -64,6 +69,7 @@ Social Bubble transforms live social media data from Bluesky into a mesmerizing 
 - **Resizable Panel**: Drag the edge to customize width
 
 ### 3D Bubble Effects
+
 - Radial gradients for depth perception
 - Glossy highlight overlays for realism
 - Drop shadows for separation
@@ -73,6 +79,7 @@ Social Bubble transforms live social media data from Bluesky into a mesmerizing 
 ## 🛠️ Local Development
 
 ### Prerequisites
+
 - Node.js 18+ and npm
 - PostgreSQL database (or Railway account)
 - Bluesky account with app password
@@ -80,12 +87,14 @@ Social Bubble transforms live social media data from Bluesky into a mesmerizing 
 ### Quick Start
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/King0508/social-bubble.git
    cd social-bubble
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm run install:all
    ```
@@ -93,22 +102,24 @@ Social Bubble transforms live social media data from Bluesky into a mesmerizing 
 3. **Set up environment variables**
 
    Create `backend/.env`:
+
    ```env
    PORT=3001
    NODE_ENV=development
-   
+
    # Database (Railway or local PostgreSQL)
    DATABASE_URL=postgresql://user:password@host:port/database
-   
+
    # Bluesky API
    BLUESKY_IDENTIFIER=your-handle.bsky.social
    BLUESKY_PASSWORD=your-app-password
-   
+
    # CORS
    FRONTEND_URL=http://localhost:5173
    ```
 
 4. **Initialize the database**
+
    ```bash
    cd backend
    node jobs/fetchPosts.js
@@ -117,12 +128,14 @@ Social Bubble transforms live social media data from Bluesky into a mesmerizing 
 5. **Start development servers**
 
    Terminal 1 (Backend):
+
    ```bash
    cd backend
    npm run dev
    ```
 
    Terminal 2 (Frontend):
+
    ```bash
    cd frontend
    npm run dev
@@ -192,7 +205,7 @@ Social Bubble transforms live social media data from Bluesky into a mesmerizing 
 The visualization uses a carefully selected color palette for maximum visual appeal:
 
 - **Purple** (#667eea) - Technology & Innovation
-- **Pink** (#f093fb, #fa709a) - Entertainment & Culture  
+- **Pink** (#f093fb, #fa709a) - Entertainment & Culture
 - **Blue** (#4facfe, #30cfd0) - News & Information
 - **Green** (#43e97b) - Environment & Nature
 - **Yellow** (#fee140, #feca57) - Lifestyle & Fun
