@@ -1,401 +1,232 @@
-# 🌌 Social Bubble - Live Social Media Visualization
+# 🌐 Social Bubble
 
-An interactive, real-time visualization of social media posts as bubbles in space. Posts are represented as bubbles sized by engagement, clustered by hashtags, with a beautiful space-themed interface.
+**An interactive real-time visualization of social media conversations as floating 3D bubbles**
 
-![Social Bubble Demo](demo.gif)
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen.svg)](https://social-bubble.vercel.app)
+[![React](https://img.shields.io/badge/React-18.3-61dafb.svg)](https://reactjs.org/)
+[![D3.js](https://img.shields.io/badge/D3.js-7.9-orange.svg)](https://d3js.org/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-## ✨ Features
+![Social Bubble Preview](./screenshot.png)
 
-- **Real-time Updates**: Live WebSocket connection for instant post updates
-- **Interactive Bubbles**: D3.js force simulation with smooth animations
-- **Topic Clustering**: Posts with similar hashtags cluster together in space
-- **Color-coded Topics**: Different colors for different hashtags
-- **Smart Filtering**: Filter by trending hashtags or search by author
-- **Engagement Metrics**: Bubble size reflects post popularity (likes + reposts + replies)
-- **Space Theme**: Beautiful dark theme with animated stars
-- **Click to View**: Click any bubble to open the original post
+## ✨ Overview
 
-## 🛠️ Tech Stack
+Social Bubble transforms live social media data from Bluesky into a mesmerizing visualization where conversations become colorful, interactive 3D bubbles. Watch as trending topics float and pulse with activity, with each bubble containing individual posts sized by their popularity and engagement.
+
+### 🎯 Key Features
+
+- **🔴 Real-Time Data**: Live updates from Bluesky every 15 minutes
+- **🫧 3D Bubble Physics**: Realistic bubble effects with radial gradients and glossy highlights
+- **🎨 Dynamic Sizing**: Bubbles scale based on engagement and post count
+- **🏷️ Topic Clustering**: Posts automatically grouped by hashtags into parent bubbles
+- **👤 Profile Pictures**: User avatars displayed in individual post bubbles
+- **🔍 Advanced Filtering**: Filter by hashtags, search by author, and more
+- **📊 Live Statistics**: Real-time metrics for posts, authors, and engagement
+- **↔️ Resizable Sidebar**: Drag to adjust the filter panel width
+- **🖱️ Interactive**: Drag bubbles, hover for details, click to open posts
+- **📱 Responsive Design**: Beautiful on all screen sizes
+
+## 🚀 Tech Stack
 
 ### Frontend
 - **React** - UI framework
-- **Vite** - Build tool and dev server
 - **D3.js** - Data visualization and force simulation
+- **Vite** - Fast build tool and dev server
 - **Socket.io Client** - Real-time WebSocket connection
+- **CSS3** - Custom animations and styling
 
 ### Backend
-- **Node.js + Express** - Server framework
-- **Socket.io** - Real-time WebSocket server
-- **PostgreSQL** - Database for post storage
-- **Bluesky API** - Social media data source
-- **node-cron** - Scheduled data fetching
+- **Node.js & Express** - REST API server
+- **Socket.io** - WebSocket server for real-time updates
+- **PostgreSQL** - Persistent data storage
+- **Bluesky AT Protocol** - Social media data source
+- **Node-cron** - Scheduled data fetching
 
-## 📋 Prerequisites
+### Infrastructure
+- **Vercel** - Frontend hosting
+- **Railway** - Backend hosting + PostgreSQL database
+- **GitHub Actions** - CI/CD pipeline
 
-- **Node.js** 18+ 
-- **PostgreSQL** 14+ (or use Railway's managed database)
-- **npm** or **yarn**
+## 📸 Features in Detail
 
-## 🚀 Local Development Setup
+### Real-Time Visualization
+- Posts appear as bubbles within topic circles
+- Size reflects engagement (likes + reposts + replies)
+- Color-coded by hashtag category
+- Smooth animations and transitions
+- No overlapping bubbles with automatic scaling
 
-### 1. Clone the Repository
+### Advanced Filters
+- **Trending Topics**: Click hashtags to filter posts
+- **Author Search**: Find posts by specific users
+- **Dynamic Updates**: Filters apply in real-time
+- **Active Filters Badge**: See how many filters are active
+- **Resizable Panel**: Drag the edge to customize width
 
-```bash
-cd social-bubble
-```
+### 3D Bubble Effects
+- Radial gradients for depth perception
+- Glossy highlight overlays for realism
+- Drop shadows for separation
+- Enhanced glow on hover
+- Smooth transitions and animations
 
-### 2. Backend Setup
+## 🛠️ Local Development
 
-```bash
-cd backend
-npm install
-```
+### Prerequisites
+- Node.js 18+ and npm
+- PostgreSQL database (or Railway account)
+- Bluesky account with app password
 
-Create a `.env` file in the `backend` directory:
+### Quick Start
 
-```env
-PORT=3001
-NODE_ENV=development
-
-# PostgreSQL Database
-DATABASE_URL=postgresql://user:password@localhost:5432/social_bubble
-
-# Bluesky API (Optional - works without for public posts)
-BLUESKY_IDENTIFIER=your-handle.bsky.social
-BLUESKY_PASSWORD=your-app-password
-
-# CORS
-FRONTEND_URL=http://localhost:5173
-```
-
-**Setup PostgreSQL Database:**
-
-```bash
-# Create database
-createdb social_bubble
-
-# Or use psql
-psql -c "CREATE DATABASE social_bubble;"
-```
-
-The database schema will be automatically created when you start the server.
-
-**Start the backend:**
-
-```bash
-npm run dev
-```
-
-The server will:
-- Initialize the database schema
-- Connect to Bluesky API
-- Fetch initial posts
-- Start WebSocket server on port 3001
-- Schedule data fetching every 2 minutes
-
-### 3. Frontend Setup
-
-```bash
-cd frontend
-npm install
-```
-
-Create a `.env` file in the `frontend` directory:
-
-```env
-VITE_BACKEND_URL=http://localhost:3001
-```
-
-**Start the frontend:**
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:5173](http://localhost:5173) in your browser.
-
-## 🌐 Deployment
-
-### Backend Deployment (Railway)
-
-1. **Create Railway Account**: Go to [railway.app](https://railway.app)
-
-2. **Create New Project**:
-   - Click "New Project"
-   - Select "Deploy from GitHub repo"
-   - Connect your repository
-   - Select the `backend` folder as root directory
-
-3. **Add PostgreSQL Database**:
-   - Click "+ New" → "Database" → "PostgreSQL"
-   - Railway will automatically set `DATABASE_URL` environment variable
-
-4. **Set Environment Variables**:
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/King0508/social-bubble.git
+   cd social-bubble
    ```
+
+2. **Install dependencies**
+   ```bash
+   npm run install:all
+   ```
+
+3. **Set up environment variables**
+
+   Create `backend/.env`:
+   ```env
+   PORT=3001
+   NODE_ENV=development
+   
+   # Database (Railway or local PostgreSQL)
+   DATABASE_URL=postgresql://user:password@host:port/database
+   
+   # Bluesky API
+   BLUESKY_IDENTIFIER=your-handle.bsky.social
+   BLUESKY_PASSWORD=your-app-password
+   
+   # CORS
+   FRONTEND_URL=http://localhost:5173
+   ```
+
+4. **Initialize the database**
+   ```bash
+   cd backend
+   node jobs/fetchPosts.js
+   ```
+
+5. **Start development servers**
+
+   Terminal 1 (Backend):
+   ```bash
+   cd backend
+   npm run dev
+   ```
+
+   Terminal 2 (Frontend):
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+
+6. **Open your browser**
+   ```
+   http://localhost:5173
+   ```
+
+## 🌍 Deployment
+
+### Backend (Railway)
+
+1. Create a new project on [Railway](https://railway.app)
+2. Add PostgreSQL database
+3. Deploy from GitHub repository
+4. Set root directory to `backend`
+5. Add environment variables:
+   ```
+   DATABASE_URL=${{Postgres.DATABASE_URL}}
+   BLUESKY_IDENTIFIER=your-handle.bsky.social
+   BLUESKY_PASSWORD=your-app-password
    PORT=3001
    NODE_ENV=production
-   FRONTEND_URL=https://your-app.vercel.app
-   BLUESKY_IDENTIFIER=your-handle.bsky.social (optional)
-   BLUESKY_PASSWORD=your-password (optional)
    ```
+6. Generate domain and copy the URL
 
-5. **Deploy**:
-   - Railway will auto-deploy
-   - Copy your backend URL (e.g., `https://your-app.up.railway.app`)
+### Frontend (Vercel)
 
-### Frontend Deployment (Vercel)
-
-1. **Create Vercel Account**: Go to [vercel.com](https://vercel.com)
-
-2. **Import Project**:
-   - Click "New Project"
-   - Import from GitHub
-   - Select your repository
-   - Set **Root Directory** to `frontend`
-
-3. **Configure Build Settings**:
-   - Framework Preset: **Vite**
-   - Build Command: `npm run build`
-   - Output Directory: `dist`
-
-4. **Set Environment Variables**:
+1. Import project on [Vercel](https://vercel.com)
+2. Set root directory to `frontend`
+3. Add environment variable:
    ```
-   VITE_BACKEND_URL=https://your-backend.up.railway.app
+   VITE_BACKEND_URL=https://your-railway-backend.up.railway.app
    ```
+4. Deploy
 
-5. **Deploy**:
-   - Click "Deploy"
-   - Your app will be live at `https://your-app.vercel.app`
-
-6. **Update Backend CORS**:
-   - Go back to Railway
-   - Update `FRONTEND_URL` to your Vercel URL
-   - Redeploy backend
-
-## 📁 Project Structure
+## 📊 Architecture
 
 ```
-social-bubble/
-├── backend/
-│   ├── config/
-│   │   └── database.js          # PostgreSQL connection & schema
-│   ├── services/
-│   │   ├── blueskyService.js    # Bluesky API integration
-│   │   └── postService.js       # Database operations
-│   ├── jobs/
-│   │   └── fetchPosts.js        # Standalone fetch script
-│   ├── server.js                # Main Express + Socket.io server
-│   ├── package.json
-│   └── railway.json             # Railway deployment config
-│
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── BubbleVisualization.jsx  # D3.js bubble chart
-│   │   │   ├── Filters.jsx              # Filter controls
-│   │   │   ├── Header.jsx               # Stats header
-│   │   │   ├── ConnectionStatus.jsx     # WebSocket status
-│   │   │   └── Legend.jsx               # Color legend
-│   │   ├── App.jsx              # Main app component
-│   │   ├── main.jsx             # React entry point
-│   │   └── index.css            # Space-themed styles
-│   ├── index.html
-│   ├── package.json
-│   └── vercel.json              # Vercel deployment config
-│
-└── README.md
+┌─────────────────┐
+│   Bluesky API   │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐      ┌──────────────┐
+│  Node.js API    │◄────►│  PostgreSQL  │
+│  (Railway)      │      │  (Railway)   │
+└────────┬────────┘      └──────────────┘
+         │
+         │ WebSocket
+         ▼
+┌─────────────────┐
+│  React + D3.js  │
+│  (Vercel)       │
+└─────────────────┘
+         │
+         ▼
+┌─────────────────┐
+│      Users      │
+└─────────────────┘
 ```
 
-## 🎨 Customization
+## 🎨 Color Palette
 
-### Change Data Source
+The visualization uses a carefully selected color palette for maximum visual appeal:
 
-To use a different social media API, modify `backend/services/blueskyService.js`:
-
-```javascript
-export async function fetchTrendingPosts(limit = 100) {
-  // Replace with your API calls
-  // Return array of posts with this structure:
-  return [{
-    post_uri: 'unique-id',
-    author: 'username',
-    text: 'post content',
-    hashtags: ['#tag1', '#tag2'],
-    likes: 10,
-    reposts: 5,
-    replies: 3,
-    engagement_score: 23,
-    created_at: '2024-01-01T00:00:00Z',
-    post_url: 'https://...'
-  }];
-}
-```
-
-### Adjust Bubble Sizes
-
-In `frontend/src/components/BubbleVisualization.jsx`:
-
-```javascript
-const radiusScale = d3.scaleSqrt()
-  .domain([0, maxEngagement])
-  .range([10, 60]); // Change min/max bubble size here
-```
-
-### Change Color Scheme
-
-Modify the `colors` array in `BubbleVisualization.jsx`:
-
-```javascript
-const colors = [
-  '#667eea', // Your custom colors
-  '#f093fb',
-  // ... add more
-];
-```
-
-### Update Fetch Frequency
-
-In `backend/server.js`:
-
-```javascript
-// Change from every 2 minutes to your desired interval
-cron.schedule('*/5 * * * *', fetchAndBroadcast); // Every 5 minutes
-```
-
-## 🔧 Manual Data Fetch
-
-Run the standalone fetch script without starting the server:
-
-```bash
-cd backend
-npm run fetch
-```
-
-This is useful for:
-- Testing the Bluesky API connection
-- Populating the database initially
-- Running as a cron job separately
-
-## 🐛 Troubleshooting
-
-### Backend won't start
-
-- **Database connection error**: Check your `DATABASE_URL` is correct
-- **Port already in use**: Change `PORT` in `.env` or kill the process using port 3001
-
-### No posts appearing
-
-- **Check backend logs**: Look for errors in console
-- **Run manual fetch**: `npm run fetch` to test API connection
-- **Bluesky API rate limit**: Free tier has limits, wait and try again
-
-### Frontend shows "Disconnected"
-
-- **Backend not running**: Start backend server first
-- **Wrong backend URL**: Check `VITE_BACKEND_URL` in frontend `.env`
-- **CORS issues**: Ensure `FRONTEND_URL` is set correctly in backend
-
-### Bubbles not clustering
-
-- **Not enough data**: Need posts with hashtags to cluster
-- **All same hashtag**: Bubbles only separate with different hashtags
-
-## 📝 API Endpoints
-
-### `GET /health`
-Health check endpoint
-
-**Response:**
-```json
-{
-  "status": "ok",
-  "timestamp": "2024-01-01T00:00:00.000Z"
-}
-```
-
-### `GET /api/posts`
-Get posts with optional filters
-
-**Query Parameters:**
-- `hashtag` - Filter by hashtag
-- `author` - Filter by author username
-- `limit` - Max posts to return (default: 200)
-
-**Response:**
-```json
-[
-  {
-    "id": 1,
-    "post_uri": "...",
-    "author": "username",
-    "text": "post content",
-    "hashtags": ["#tag1"],
-    "likes": 10,
-    "reposts": 5,
-    "replies": 3,
-    "engagement_score": 23,
-    "created_at": "2024-01-01T00:00:00Z",
-    "post_url": "https://..."
-  }
-]
-```
-
-### `GET /api/hashtags/trending`
-Get trending hashtags
-
-**Response:**
-```json
-[
-  { "tag": "#topic", "count": 42 }
-]
-```
-
-### `GET /api/stats`
-Get overall statistics
-
-**Response:**
-```json
-{
-  "total_posts": 150,
-  "total_authors": 75,
-  "total_engagement": 3420,
-  "last_fetch": "2024-01-01T00:00:00Z"
-}
-```
-
-## 🎯 Future Enhancements (Phase 2+)
-
-- [ ] Time-based filtering (last hour, 24 hours, week)
-- [ ] Historical replay feature
-- [ ] Sentiment analysis with color coding
-- [ ] User authentication and saved filters
-- [ ] Multiple social media sources (Twitter, Reddit, etc.)
-- [ ] 3D bubble visualization with Three.js
-- [ ] Export visualizations as images/videos
-- [ ] Mobile responsive design
-- [ ] Dark/light theme toggle
-
-## 📄 License
-
-MIT License - feel free to use this project for your portfolio or learning!
+- **Purple** (#667eea) - Technology & Innovation
+- **Pink** (#f093fb, #fa709a) - Entertainment & Culture  
+- **Blue** (#4facfe, #30cfd0) - News & Information
+- **Green** (#43e97b) - Environment & Nature
+- **Yellow** (#fee140, #feca57) - Lifestyle & Fun
+- **Red** (#ff6b6b) - Breaking News & Urgent
 
 ## 🤝 Contributing
 
-Contributions welcome! Please:
+Contributions are welcome! Please feel free to submit a Pull Request.
+
 1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 💡 Credits
+## 📝 License
 
-Built with ❤️ using:
-- [D3.js](https://d3js.org/) for visualization
-- [Bluesky API](https://docs.bsky.app/) for social data
-- [Socket.io](https://socket.io/) for real-time updates
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **Bluesky** - For providing free API access to social data
+- **D3.js Community** - For amazing visualization tools
+- **Interstellar** - For visual inspiration
+
+## 📧 Contact
+
+**King0508** - [@King0508](https://github.com/King0508)
+
+Project Link: [https://github.com/King0508/social-bubble](https://github.com/King0508/social-bubble)
 
 ---
 
-**Enjoy visualizing the social media cosmos! 🌌✨**
-
+<div align="center">
+  <p>Built with ❤️ using React, D3.js, and real-time data</p>
+  <p>⭐ Star this repo if you found it interesting!</p>
+</div>
