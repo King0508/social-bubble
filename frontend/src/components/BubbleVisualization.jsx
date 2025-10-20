@@ -5,7 +5,6 @@ const BubbleVisualization = ({ posts }) => {
   const svgRef = useRef(null);
   const tooltipRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const [scalingInfo, setScalingInfo] = useState(null);
 
   // Update dimensions on window resize
   useEffect(() => {
@@ -118,14 +117,11 @@ const BubbleVisualization = ({ posts }) => {
       ? Math.sqrt(targetArea / estimatedTotalArea) 
       : 1.0;
     
-    // Log scaling information and update UI indicator
+    // Log scaling information
     if (scaleFactor < 1.0) {
       const scalePercent = Math.floor(scaleFactor * 100);
       console.log(`🔄 Scaling bubbles to ${scalePercent}% to prevent overlap`);
       console.log(`📊 ${totalBubbles} topics, ${totalPosts} posts, Scale: ${scaleFactor.toFixed(2)}`);
-      setScalingInfo({ percent: scalePercent, topics: totalBubbles, posts: totalPosts });
-    } else {
-      setScalingInfo(null);
     }
     
     // Apply scale factor with minimum limits
@@ -145,8 +141,54 @@ const BubbleVisualization = ({ posts }) => {
       return Math.max(minParentRadius, minRadius);
     };
 
-    // Create defs for patterns (profile pictures)
+    // Create defs for patterns (profile pictures) and gradients
     const defs = svg.append('defs');
+
+    // Add 3D bubble gradient for realistic effect
+    hierarchicalData.forEach((group, i) => {
+      const gradient = defs.append('radialGradient')
+        .attr('id', `bubble-gradient-${i}`)
+        .attr('cx', '35%')
+        .attr('cy', '35%')
+        .attr('r', '65%');
+      
+      gradient.append('stop')
+        .attr('offset', '0%')
+        .attr('stop-color', group.color)
+        .attr('stop-opacity', 0.9);
+      
+      gradient.append('stop')
+        .attr('offset', '50%')
+        .attr('stop-color', group.color)
+        .attr('stop-opacity', 0.4);
+      
+      gradient.append('stop')
+        .attr('offset', '100%')
+        .attr('stop-color', group.color)
+        .attr('stop-opacity', 0.15);
+      
+      // Add highlight gradient for glossy effect
+      const highlightGradient = defs.append('radialGradient')
+        .attr('id', `bubble-highlight-${i}`)
+        .attr('cx', '30%')
+        .attr('cy', '30%')
+        .attr('r', '50%');
+      
+      highlightGradient.append('stop')
+        .attr('offset', '0%')
+        .attr('stop-color', '#ffffff')
+        .attr('stop-opacity', 0.6);
+      
+      highlightGradient.append('stop')
+        .attr('offset', '50%')
+        .attr('stop-color', '#ffffff')
+        .attr('stop-opacity', 0.1);
+      
+      highlightGradient.append('stop')
+        .attr('offset', '100%')
+        .attr('stop-color', '#ffffff')
+        .attr('stop-opacity', 0);
+    });
 
     // Add patterns for each post's avatar
     posts.forEach((post, i) => {
@@ -334,29 +376,30 @@ const BubbleVisualization = ({ posts }) => {
       .attr('class', 'parent-group')
       .style('cursor', 'grab');
 
-    // Add glow effect for parent bubbles
+    // Add 3D bubbles with gradients for realistic effect
     const parentBubbles = parentGroups.append('circle')
       .attr('class', 'parent-bubble')
       .attr('r', d => d.radius)
-      .attr('fill', d => d.color)
-      .attr('fill-opacity', d => {
-        // Vary opacity based on engagement (more popular = more visible)
-        const maxEngagement = Math.max(...hierarchicalData.map(g => g.totalEngagement));
-        const normalizedEngagement = d.hashtag ? 
-          (hierarchicalData.find(g => g.hashtag === d.hashtag)?.totalEngagement || 0) / maxEngagement : 0;
-        return 0.06 + (normalizedEngagement * 0.08); // Range: 0.06 to 0.14
-      })
+      .attr('fill', (d, i) => `url(#bubble-gradient-${hierarchicalData.findIndex(g => g.hashtag === d.hashtag)})`)
       .attr('stroke', d => d.color)
       .attr('stroke-width', 3)
-      .attr('stroke-opacity', 0.7)
+      .attr('stroke-opacity', 0.8)
       .style('filter', d => {
         // More popular topics get stronger glow
         const maxEngagement = Math.max(...hierarchicalData.map(g => g.totalEngagement));
         const normalizedEngagement = d.hashtag ? 
           (hierarchicalData.find(g => g.hashtag === d.hashtag)?.totalEngagement || 0) / maxEngagement : 0;
-        const glowIntensity = 10 + (normalizedEngagement * 15);
-        return `drop-shadow(0 0 ${glowIntensity}px ${d.color}40)`;
+        const glowIntensity = 12 + (normalizedEngagement * 18);
+        return `drop-shadow(0 4px 12px rgba(0,0,0,0.6)) drop-shadow(0 0 ${glowIntensity}px ${d.color})`;
       })
+      .style('transition', 'all 0.3s ease');
+    
+    // Add glossy highlight overlay for 3D effect
+    parentGroups.append('circle')
+      .attr('class', 'parent-highlight')
+      .attr('r', d => d.radius)
+      .attr('fill', (d, i) => `url(#bubble-highlight-${hierarchicalData.findIndex(g => g.hashtag === d.hashtag)})`)
+      .attr('pointer-events', 'none')
       .style('transition', 'all 0.3s ease');
 
     // Add topic labels with dynamic sizing based on scale factor
@@ -405,14 +448,20 @@ const BubbleVisualization = ({ posts }) => {
         d3.select(this).select('.parent-bubble')
           .transition()
           .duration(200)
-          .attr('stroke-width', 4)
+          .attr('stroke-width', 5)
           .attr('stroke-opacity', 1)
-          .attr('fill-opacity', d => {
+          .style('filter', d => {
             const maxEngagement = Math.max(...hierarchicalData.map(g => g.totalEngagement));
             const normalizedEngagement = d.hashtag ? 
               (hierarchicalData.find(g => g.hashtag === d.hashtag)?.totalEngagement || 0) / maxEngagement : 0;
-            return 0.12 + (normalizedEngagement * 0.1);
+            const glowIntensity = 18 + (normalizedEngagement * 25);
+            return `drop-shadow(0 6px 20px rgba(0,0,0,0.8)) drop-shadow(0 0 ${glowIntensity}px ${d.color})`;
           });
+        
+        d3.select(this).select('.parent-highlight')
+          .transition()
+          .duration(200)
+          .style('opacity', 1.2);
         
         d3.select(this).select('.parent-label')
           .transition()
@@ -425,13 +474,19 @@ const BubbleVisualization = ({ posts }) => {
           .transition()
           .duration(200)
           .attr('stroke-width', 3)
-          .attr('stroke-opacity', 0.7)
-          .attr('fill-opacity', d => {
+          .attr('stroke-opacity', 0.8)
+          .style('filter', d => {
             const maxEngagement = Math.max(...hierarchicalData.map(g => g.totalEngagement));
             const normalizedEngagement = d.hashtag ? 
               (hierarchicalData.find(g => g.hashtag === d.hashtag)?.totalEngagement || 0) / maxEngagement : 0;
-            return 0.06 + (normalizedEngagement * 0.08);
+            const glowIntensity = 12 + (normalizedEngagement * 18);
+            return `drop-shadow(0 4px 12px rgba(0,0,0,0.6)) drop-shadow(0 0 ${glowIntensity}px ${d.color})`;
           });
+        
+        d3.select(this).select('.parent-highlight')
+          .transition()
+          .duration(200)
+          .style('opacity', 1);
         
         d3.select(this).select('.parent-label')
           .transition()
@@ -476,25 +531,47 @@ const BubbleVisualization = ({ posts }) => {
           .remove()
       );
 
-    // Add circles for child bubbles
+    // Add circles for child bubbles with 3D effect
     childBubbles.append('circle')
       .attr('r', d => d.radius)
       .attr('fill', d => {
         const postIndex = posts.findIndex(p => p.post_uri === d.post.post_uri);
-        return d.post.author_avatar ? `url(#avatar-${postIndex})` : d.color;
+        if (d.post.author_avatar) {
+          return `url(#avatar-${postIndex})`;
+        } else {
+          const groupIndex = hierarchicalData.findIndex(g => g.hashtag === d.hashtag);
+          return `url(#bubble-gradient-${groupIndex})`;
+        }
       })
-      .attr('opacity', 0.9)
-      .attr('stroke', '#fff')
-      .attr('stroke-width', 2);
+      .attr('stroke', d => d.post.author_avatar ? '#fff' : d.color)
+      .attr('stroke-width', 2.5)
+      .attr('stroke-opacity', 0.9)
+      .style('filter', 'drop-shadow(0 3px 8px rgba(0, 0, 0, 0.5))');
+    
+    // Add glossy highlight to child bubbles
+    childBubbles.append('circle')
+      .attr('r', d => d.radius)
+      .attr('fill', d => {
+        const groupIndex = hierarchicalData.findIndex(g => g.hashtag === d.hashtag);
+        return `url(#bubble-highlight-${groupIndex})`;
+      })
+      .attr('pointer-events', 'none')
+      .style('opacity', 0.7);
 
     // Add interaction handlers
     childBubbles
       .on('mouseover', function(event, d) {
-        d3.select(this).select('circle')
+        d3.select(this).selectAll('circle').filter((d, i) => i === 0)
           .transition()
           .duration(200)
           .attr('stroke-width', 4)
-          .attr('opacity', 1);
+          .attr('stroke-opacity', 1)
+          .style('filter', 'drop-shadow(0 4px 16px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 20px currentColor)');
+        
+        d3.select(this).selectAll('circle').filter((d, i) => i === 1)
+          .transition()
+          .duration(200)
+          .style('opacity', 1.0);
 
         tooltip
           .style('opacity', 1)
@@ -521,11 +598,17 @@ const BubbleVisualization = ({ posts }) => {
           .style('top', `${event.pageY + 15}px`);
       })
       .on('mouseout', function() {
-        d3.select(this).select('circle')
+        d3.select(this).selectAll('circle').filter((d, i) => i === 0)
           .transition()
           .duration(200)
-          .attr('stroke-width', 2)
-          .attr('opacity', 0.9);
+          .attr('stroke-width', 2.5)
+          .attr('stroke-opacity', 0.9)
+          .style('filter', 'drop-shadow(0 3px 8px rgba(0, 0, 0, 0.5))');
+        
+        d3.select(this).selectAll('circle').filter((d, i) => i === 1)
+          .transition()
+          .duration(200)
+          .style('opacity', 0.7);
 
         tooltip.style('opacity', 0);
       })
@@ -587,19 +670,6 @@ const BubbleVisualization = ({ posts }) => {
         height={dimensions.height}
       />
       <div ref={tooltipRef} className="tooltip" style={{ opacity: 0 }} />
-      
-      {/* Scaling indicator when bubbles are automatically resized */}
-      {scalingInfo && (
-        <div className="scaling-indicator">
-          <div className="scaling-icon">⚖️</div>
-          <div className="scaling-text">
-            <div className="scaling-title">Auto-scaled to {scalingInfo.percent}%</div>
-            <div className="scaling-subtitle">
-              {scalingInfo.topics} topics • {scalingInfo.posts} posts • No overlap mode
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };

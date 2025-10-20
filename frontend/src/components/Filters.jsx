@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 const Filters = ({
   hashtags,
@@ -10,12 +10,51 @@ const Filters = ({
 }) => {
   const hasActiveFilters = selectedHashtags.length > 0 || searchAuthor.trim() !== '';
   const [isOpen, setIsOpen] = useState(true);
+  const [sidebarWidth, setSidebarWidth] = useState(350);
+  const [isResizing, setIsResizing] = useState(false);
+  const sidebarRef = useRef(null);
+
+  // Handle resize
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (!isResizing) return;
+      
+      const newWidth = e.clientX;
+      if (newWidth >= 250 && newWidth <= 600) {
+        setSidebarWidth(newWidth);
+      }
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+      document.body.style.cursor = 'default';
+      document.body.style.userSelect = 'auto';
+    };
+
+    if (isResizing) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = 'ew-resize';
+      document.body.style.userSelect = 'none';
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isResizing]);
+
+  const handleResizeStart = (e) => {
+    e.preventDefault();
+    setIsResizing(true);
+  };
 
   return (
     <>
       {/* Toggle button - fixed on left edge */}
       <button
         className={`sidebar-toggle-btn ${isOpen ? 'open' : ''}`}
+        style={isOpen ? { left: `${sidebarWidth}px` } : {}}
         onClick={() => setIsOpen(!isOpen)}
         title={isOpen ? 'Close Filters' : 'Open Filters'}
       >
@@ -31,7 +70,18 @@ const Filters = ({
       )}
 
       {/* Sidebar panel - fixed on left */}
-      <div className={`filters-sidebar ${isOpen ? 'open' : ''}`}>
+      <div 
+        ref={sidebarRef}
+        className={`filters-sidebar ${isOpen ? 'open' : ''}`}
+        style={{ width: `${sidebarWidth}px` }}
+      >
+        {/* Resize handle */}
+        <div 
+          className="resize-handle"
+          onMouseDown={handleResizeStart}
+          title="Drag to resize"
+        />
+        
         <div className="sidebar-header">
           <div className="sidebar-title">
             <span className="sidebar-icon">🔍</span>

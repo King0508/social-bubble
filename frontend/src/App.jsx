@@ -3,6 +3,7 @@ import { io } from 'socket.io-client';
 import BubbleVisualization from './components/BubbleVisualization';
 import Filters from './components/Filters';
 import Header from './components/Header';
+import Footer from './components/Footer';
 import ConnectionStatus from './components/ConnectionStatus';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
@@ -132,6 +133,7 @@ function App() {
         <BubbleVisualization posts={displayPosts} />
       )}
       
+      <Footer />
       <ConnectionStatus isConnected={isConnected} />
     </div>
   );
