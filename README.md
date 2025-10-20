@@ -240,12 +240,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **D3.js Community** - For amazing visualization tools
 - **Interstellar** - For visual inspiration
 
-## 📧 Contact
-
-**King0508** - [@King0508](https://github.com/King0508)
-
-Project Link: [https://github.com/King0508/social-bubble](https://github.com/King0508/social-bubble)
-
 ---
 
 <div align="center">
